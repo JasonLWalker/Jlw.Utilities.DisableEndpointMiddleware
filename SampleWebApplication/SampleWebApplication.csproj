@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+	  <Nullable>enable</Nullable>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <GenerateDocumentationFile>False</GenerateDocumentationFile>
+	  <GenerateEmbeddedFilesManifest>True</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Jlw.Extensions.Identity.Mock" Version="3.0.8553.8226" />
+		<PackageReference Include="Jlw.Extensions.Identity.Stores" Version="3.0.8553.8226" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Jlw.Utilities.DisableEndpointMiddleware\Jlw.Utilities.DisableEndpointMiddleware.csproj" />
+	</ItemGroup>
+
+
+</Project>
