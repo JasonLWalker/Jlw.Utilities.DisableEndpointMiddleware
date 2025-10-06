@@ -56,7 +56,7 @@ jobs:
         shell: pwsh
         run: dotnet test --no-build --no-restore --configuration '${{ env.INPUT_BUILD_CONFIG }}' --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
       - name: Upload dotnet test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dotnet-results-${{ matrix.dotnet-version }}
           path: TestResults-${{ matrix.dotnet-version }}
