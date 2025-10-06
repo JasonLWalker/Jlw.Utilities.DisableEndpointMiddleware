@@ -31,7 +31,7 @@ namespace Jlw.Utilities.DisableEndpointMiddleware
         public async Task InvokeAsync(HttpContext context)
         {
             // Does the requested path start with the Base path that we are blocking?
-            if (context.Request.Path.StartsWithSegments(_options.BasePath))
+            if (!string.IsNullOrWhiteSpace(_options.BasePath) && context.Request.Path.StartsWithSegments(_options.BasePath.TrimEnd('/')))
             {
                 // Are there any paths that should be allowed within the base path?
                 if (_options.AllowedPaths?.Count() > 0)
