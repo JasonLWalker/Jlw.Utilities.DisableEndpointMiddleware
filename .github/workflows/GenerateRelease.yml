@@ -1,0 +1,62 @@
+# This is a basic workflow that is manually triggered
+
+name: Manual workflow
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+   
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "greet"
+  release:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        dotnet-version: 3.1
+    - name: Configure private package repo
+      run: dotnet nuget add source https://nuget.pkg.github.com/${{ secrets.NUGET_USER }}/index.json --store-password-in-clear-text --name=github --username=${{ secrets.NUGET_USER }} --password=${{ secrets.NUGET_KEY }}
+    - name: Pack NuGet package
+      run: dotnet pack --version-suffix="-alpha" --configuration Release
+    - name: Get Package Info
+      run: |
+        export PKG_NAME="$(pwd | sed 's/.*\/\([^\/]*\)$/\1/')"
+        export PKG_VERSION="$(echo `ls /home/runner/work/Jlw.Standard.Utilities.Data/Jlw.Standard.Utilities.Data/Jlw.Standard.Utilities.Data/bin/Release/*.nupkg` | sed 's/[^0-9]*\([0-9.a-z\-]*\)\.nupkg/v\1/')"
+        echo "::set-env name=PKGNAME::$PKG_NAME"        
+        echo "::set-env name=PKGVERSION::$PKG_VERSION"        
+    #- name: Test Env
+    #  run: echo "${{ env.PKGNAME }} ${{ env.PKGVERSION }}"
+    - name: Create zip archive
+      run: |
+        ls ./
+        ls ./${{ env.PKGNAME }}/
+        ls ./${{ env.PKGNAME }}/bin/
+        ls ./${{ env.PKGNAME }}/bin/Release
+        zip -r "${{ env.PKGNAME }}.${{ env.PKGVERSION }}.zip" ./${{ env.PKGNAME }}/bin/Release/* README.md License.txt
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.PKGVERSION }} 
+        release_name: Release ${{ env.PKGNAME }}
+        draft: true
+        prerelease: true
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: "./${{ env.PKGNAME }}.${{ env.PKGVERSION }}.zip"
+        asset_name: "${{ env.PKGNAME }}.${{ env.PKGVERSION }}.zip"
+        asset_content_type: application/zip
+
