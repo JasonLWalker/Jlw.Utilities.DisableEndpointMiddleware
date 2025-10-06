@@ -47,6 +47,15 @@ namespace Jlw.Utilities.DisableEndpointMiddleware
 
                 // Path does not match, and should be blocked.
 
+                if (_options.DefaultStatusCode > 300 && _options.DefaultStatusCode < 400)
+                {
+                    if (!string.IsNullOrWhiteSpace(_options.RedirectUrl))
+                    {
+                        //context.Response.Headers["Location"] = _options.RedirectPath;
+                        context.Response.Redirect(_options.RedirectUrl);
+                    }
+                }
+
                 // Set response status code to the configured default code.
                 context.Response.StatusCode = _options.DefaultStatusCode;
 
