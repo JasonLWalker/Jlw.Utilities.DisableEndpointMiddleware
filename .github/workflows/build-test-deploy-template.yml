@@ -75,7 +75,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: REPO-${{ env.PKGVERSION }} 
-          release_name: Utility Release ${{ env.REPO_PKGNAME }}
+          release_name: Library Release ${{ env.REPO_PKGNAME }}
           draft: true
           prerelease: true
       - name: Upload Release Asset
