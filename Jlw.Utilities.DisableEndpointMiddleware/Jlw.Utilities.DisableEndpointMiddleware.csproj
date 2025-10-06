@@ -5,7 +5,52 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
+	<PropertyGroup>
+		<Product>Jlw.Utilities.DisableEndpointMiddleware</Product>
+		<PackageId>Jlw.Utilities.DisableEndpointMiddleware</PackageId>
+		<RepositoryUrl>https://github.com/JasonLWalker/Jlw.Utilities.DisableEndpointMiddleware.git</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageReleaseNotes>Provided as is</PackageReleaseNotes>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<IsPackable>True</IsPackable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<AssemblyName>$(PackageId)</AssemblyName>
+		<RootNamespace>$(PackageId)</RootNamespace>
+		<Company>Jason L. Walker</Company>
+		<Authors>Jason L. Walker</Authors>
+		<Description>
+			A utility package providing the ability to block endpoint URLs in the middleware pipeline. 
+			This is useful for disabling endpoints in production that are only intended for use in development or testing environments, 
+			or to disable unused RCL endpoints in packages such as the Microsoft Identity UI.
+		</Description>
+		<Copyright>Copyright ©2025 Jason L. Walker</Copyright>
+		<VersionPrefix Condition="'$(VersionPrefix)' == ''">0.0.0.1</VersionPrefix>
+		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<DebugSymbols>true</DebugSymbols>
+		<EmbedAllSources>true</EmbedAllSources>
+		<DebugType>portable</DebugType>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<SignAssembly>true</SignAssembly>
+		<DelaySign>false</DelaySign>
+		<AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+		<None Include="..\LICENSE" Pack="true" PackagePath="" />
+	</ItemGroup>
+
+	<ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.9" />
   </ItemGroup>
