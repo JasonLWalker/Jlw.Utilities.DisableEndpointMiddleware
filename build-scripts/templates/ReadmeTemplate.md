@@ -4,6 +4,10 @@
 ) -->
 # $projectName
 
+A utility package providing the ability to block endpoint URLs in the middleware pipeline. 
+This is useful for disabling endpoints in production that are only intended for use in development or testing environments, 
+or to disable unused RCL endpoints in packages such as the Microsoft Identity UI.
+
 ## Pipeline Status
 
 | Test | Alpha | Staging | Release |
