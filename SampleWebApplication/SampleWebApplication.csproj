@@ -11,10 +11,15 @@
 	<ItemGroup>
 		<PackageReference Include="Jlw.Extensions.Identity.Mock" Version="3.0.8553.8226" />
 		<PackageReference Include="Jlw.Extensions.Identity.Stores" Version="3.0.8553.8226" />
+		<PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="3.0.71" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Jlw.Utilities.DisableEndpointMiddleware\Jlw.Utilities.DisableEndpointMiddleware.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Areas\Identity\Pages\Account\" />
 	</ItemGroup>
 
 

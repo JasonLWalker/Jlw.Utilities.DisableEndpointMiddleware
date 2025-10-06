@@ -1,0 +1,322 @@
+﻿@using System.Collections
+@using Jlw.Utilities.DisableEndpointMiddleware
+@using Microsoft.Extensions.Options
+@inject IOptions<DisableIdentityEndpointOptions> _endpointOptions;
+@{
+    ViewData["Title"] = "Home";
+    var allowedPaths = _endpointOptions.Value?.AllowedPaths?.ToArray() ?? [];
+
+    var optionalPaths = new Dictionary<string, string>()
+    {
+        { "Error Page", "/Identity/Error" },
+        { "Access Denied Page", "/Identity/Account/AccessDenied" },
+        { "Confirm Email (Redirects to Home)", "/Identity/Account/ConfirmEmail" },
+        { "Confirm Email Change (Redirects to Home)", "/Identity/Account/ConfirmEmailChange" },
+        { "External Login", "/Identity/Account/ExternalLogin" },
+        { "Forgot Password", "/Identity/Account/ForgotPassword" },
+        { "Forgot Password Confirmation", "/Identity/Account/ForgotPasswordConfirmation" },
+        { "Locked out Page", "/Identity/Account/Lockout" },
+        { "Login", "/Identity/Account/Login" },
+        { "Login with 2-Factor Authentication", "/Identity/Account/LoginWith2fa" },
+        { "Login with Recovery Code", "/Identity/Account/LoginWithRecoveryCode" },
+        { "Logout", "/Identity/Account/Logout" },
+        { "Registration Page", "/Identity/Account/Register" },
+        { "Registration Confirmation", "/Identity/Account/RegisterConfirmation" },
+        { "Resend Email Confirmation", "/Identity/Account/ResendEmailConfirmation" },
+        { "Reset Password", "/Identity/Account/ResetPassword" },
+        { "Reset Password Confirmation", "/Identity/Account/ResetPasswordConfirmation" },
+        { "Manage Account (Allows all Manage Endpoints)", "/Identity/Account/Manage" },
+        { "Change Password", "/Identity/Account/Manage/ChangePassword" },
+        { "Delete Personal Data", "/Identity/Account/Manage/DeletePersonalData" },
+        { "Disable 2-Factor Authentication", "/Identity/Account/Manage/Disable2fa" },
+        { "Download Personal Data", "/Identity/Account/Manage/DownloadPersonalData" },
+        { "Manage Email", "/Identity/Account/Manage/Email" },
+        { "Enable Authenticator", "/Identity/Account/Manage/EnableAuthenticator" },
+        { "External Logins", "/Identity/Account/Manage/ExternalLogins" },
+        { "Generate Recovery Codes", "/Identity/Account/Manage/GenerateRecoveryCodes" },
+        { "Manage Account Index", "/Identity/Account/Manage/Index" },
+        { "Manage Nav Pages", "/Identity/Account/Manage/ManageNavPages" },
+        { "Personal Data", "/Identity/Account/Manage/PersonalData" },
+        { "Reset Authenticator", "/Identity/Account/Manage/ResetAuthenticator" },
+        { "Set Password", "/Identity/Account/Manage/SetPassword" },
+        { "Show Recovery Codes", "/Identity/Account/Manage/ShowRecoveryCodes" },
+        { "Two Factor Authentication", "/Identity/Account/Manage/TwoFactorAuthentication" },
+
+    };
+}
+<h1 class="h2">
+    Disable Identity Endpoint Sample App
+    <button type="button" class="btn btn-primary btn-sm float-end generate-code">Generate Option Code</button>
+</h1>
+<p>
+    The Middleware works by providing an array of path strings that are allowed via the IDisableEndpointOptions.AllowedPaths property.
+    If the path is not found in that list, then the middleware interrupts the Request processing, and returns the default status code and/or message provided in the options.
+</p>
+<div class="row">
+    <div class="col-lg-6">
+        <p class="h4">Base Path to disable:</p>
+        <input type="text" name="basePath" class="form-control form-control-sm" value="@_endpointOptions.Value?.BasePath" />
+        <p class="h4">Default HTTP Response Value:</p>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-radio">
+                    <label class="form-radio-label">
+                        <input type="radio" name="defaultStatusCode" class="form-radio-input" @(_endpointOptions.Value?.DefaultStatusCode == StatusCodes.Status301MovedPermanently ? "checked" : "") value="@StatusCodes.Status301MovedPermanently" />
+                        301 - Moved Permanently
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-radio">
+                    <label class="form-radio-label">
+                        <input type="radio" name="defaultStatusCode" class="form-radio-input" @(_endpointOptions.Value?.DefaultStatusCode == StatusCodes.Status302Found ? "checked" : "") value="@StatusCodes.Status302Found" />
+                        302 - Found
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-radio">
+                    <label class="form-radio-label">
+                        <input type="radio" name="defaultStatusCode" class="form-radio-input" @(_endpointOptions.Value?.DefaultStatusCode == StatusCodes.Status307TemporaryRedirect ? "checked" : "") value="@StatusCodes.Status307TemporaryRedirect" />
+                        307 - Temporary Redirect
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-radio">
+                    <label class="form-radio-label">
+                        <input type="radio" name="defaultStatusCode" class="form-radio-input" @(_endpointOptions.Value?.DefaultStatusCode == StatusCodes.Status308PermanentRedirect ? "checked" : "") value="@StatusCodes.Status308PermanentRedirect" />
+                        308 - Permanent Redirect
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-radio">
+                    <label class="form-radio-label">
+                        <input type="radio" name="defaultStatusCode" class="form-radio-input" @(_endpointOptions.Value?.DefaultStatusCode == StatusCodes.Status401Unauthorized ? "checked" : "") value="@StatusCodes.Status401Unauthorized" />
+                        401 - Unauthorized
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-radio">
+                    <label class="form-radio-label">
+                        <input type="radio" name="defaultStatusCode" class="form-radio-input" @(_endpointOptions.Value?.DefaultStatusCode == StatusCodes.Status403Forbidden ? "checked" : "") value="@StatusCodes.Status403Forbidden" />
+                        403 - Forbidden
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-radio">
+                    <label class="form-radio-label">
+                        <input type="radio" name="defaultStatusCode" class="form-radio-input" @(_endpointOptions.Value?.DefaultStatusCode == StatusCodes.Status404NotFound ? "checked" : "") value="@StatusCodes.Status404NotFound" />
+                        404 - Not Found
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <hr />
+                <label class="form-label">Redirect Url:</label>
+                <input type="text" name="redirectUrl" class="form-control form-control-sm" value="@_endpointOptions.Value?.RedirectUrl" />
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 d-flex flex-column">
+        <label class="h4">Default status message:</label>
+        <textarea name="defaultStatusMessage" class="form-control form-control-sm h-100" rows="3">@_endpointOptions.Value.DefaultStatusMessage</textarea>
+    </div>
+</div>
+<hr />
+<p class="h4">Endpoint Paths allowed:</p>
+<div class="row g-3">
+    @foreach (var kvp in optionalPaths)
+    {
+        <div class="col-md-6 col-lg-4">
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" @(allowedPaths.Contains(kvp.Value, StringComparer.InvariantCultureIgnoreCase) ? "checked" : "") data-path="@kvp.Value" />
+                    @kvp.Key
+                </label><br />
+                [<a href="@kvp.Value">@kvp.Value</a>]
+            </div>
+        </div>
+    }
+</div>
+@*
+    <p class="h4">Endpoint Paths allowed:</p>
+    <ul>
+        @foreach (var path in allowedPaths)
+        {
+            <li><a href="@path">@path</a></li>
+        }
+    </ul>
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <div class="h4">User Claims:</div>
+        <ul class="">
+            @foreach (var claim in User.Claims)
+            {
+
+                <li>
+                    Claim:
+                    {
+                    "@Html.Raw(claim.Type)",
+                    "@Html.Raw(claim.Value)"
+                    }
+                </li>
+            }
+        </ul>
+    }
+*@
+@section Scripts{
+    <script src="~/lib/bootbox.js/bootbox.min.js"></script>
+    <script language="javascript">
+        (function ($) {
+            let basePath = '@_endpointOptions.Value?.BasePath';
+            let defaultMsg = '@_endpointOptions.Value?.DefaultStatusMessage';
+            let defaultCode = '@_endpointOptions.Value?.DefaultStatusCode';
+            let redirectPath = '@_endpointOptions.Value?.RedirectUrl';
+
+            $('input:checkbox[data-path]').off().on('click', function (evt) {
+                $o = $(evt.delegateTarget);
+                $.post('@Url.Action("UpdateAllowedPath", "Home")', { path: $o.data('path'), enabled: $o.is(':checked') }).always(function (data) {
+                    $o.prop('checked', data['enabled'] == true);
+                });
+            });
+
+            $('input:text[name=basePath]').off().on('change', function (evt) {
+                $o = $(evt.delegateTarget);
+                $.post('@Url.Action("UpdateBasePath", "Home")', { value: $o.val() }).always(function (data) {
+                    if (!data['statusText']) {
+                        basePath = data['value'];
+                    }
+                    $o.val(basePath);
+                });
+            });
+
+            $('input:text[name=redirectUrl]').off().on('change', function (evt) {
+                $o = $(evt.delegateTarget);
+                $.post('@Url.Action("UpdateRedirectUrl", "Home")', { value: $o.val() }).always(function (data) {
+                    if (!data['statusText']) {
+                        redirectPath = data['value'];
+                    }
+                    $o.val(redirectPath);
+                });
+            });
+
+            $('input:radio[name=defaultStatusCode]').off().on('click', function (evt) {
+                $o = $(evt.delegateTarget);
+                $.post('@Url.Action("UpdateDefaultStatusCode", "Home")', { value: $o.val() }).always(function (data) {
+                    if (data['value']) {
+                        defaultCode = data['value'];
+                    }
+                    $('input:radio[name=defaultStatusCode]').val([defaultCode]);
+                    showRedirectUrl();
+                });
+            });
+
+            $('textarea[name=defaultStatusMessage]').off().on('change', function (evt) {
+                $o = $(evt.delegateTarget);
+                $.post('@Url.Action("UpdateDefaultStatusMessage", "Home")', { value: $o.val() }).always(function (data) {
+                    if (!data['statusText']) {
+                        defaultMsg = data['value'];
+                    }
+                    $o.val(defaultMsg);
+                });
+            });
+
+            $('button.generate-code').off().on('click', function () {
+                let sAllowedPaths = '';
+                let sStatusCode = '';
+                let sRedirectUrl = (redirectPath || '').length > 0 ? ` = "${redirectPath}";` : '';
+                let sDefaultMessage = $('textarea[name=defaultStatusMessage]').val();
+
+                sDefaultMessage = (sDefaultMessage || '').length > 0 ? ' = "' + sDefaultMessage.replaceAll('\\', '\\\\').replaceAll('\n', '\\n').replaceAll('\r', '\\r').replaceAll('\"', '\\"') + '";' : '';
+
+                $('input:checkbox[data-path]:checked').each(function (i, elem) {
+                    let $o = $(elem);
+                    sAllowedPaths += `\n\t\t"${$o.data('path')}",`;
+                });
+                if (sAllowedPaths.length > 1) sAllowedPaths = '' + sAllowedPaths.substring(0, sAllowedPaths.length - 1) + '\n\t';
+
+                switch (defaultCode.toString()) {
+                    case '@StatusCodes.Status301MovedPermanently':
+                        sStatusCode = 'Microsoft.AspNetCore.Http.StatusCodes.@nameof(StatusCodes.Status301MovedPermanently)';
+                        break;
+                    case '@StatusCodes.Status302Found':
+                        sStatusCode = 'Microsoft.AspNetCore.Http.StatusCodes.@nameof(StatusCodes.Status302Found)';
+                        break;
+                    case '@StatusCodes.Status307TemporaryRedirect':
+                        sStatusCode = 'Microsoft.AspNetCore.Http.StatusCodes.@nameof(StatusCodes.Status307TemporaryRedirect)';
+                        break;
+                    case '@StatusCodes.Status308PermanentRedirect':
+                        sStatusCode = 'Microsoft.AspNetCore.Http.StatusCodes.@nameof(StatusCodes.Status308PermanentRedirect)';
+                        break;
+                    case '@StatusCodes.Status401Unauthorized':
+                        sStatusCode = 'Microsoft.AspNetCore.Http.StatusCodes.@nameof(StatusCodes.Status401Unauthorized)';
+                        break;
+                    case '@StatusCodes.Status403Forbidden':
+                        sStatusCode = 'Microsoft.AspNetCore.Http.StatusCodes.@nameof(StatusCodes.Status403Forbidden)';
+                        break;
+                    case '@StatusCodes.Status404NotFound':
+                        sStatusCode = 'Microsoft.AspNetCore.Http.StatusCodes.@nameof(StatusCodes.Status404NotFound)';
+                        break;
+                    default:
+                        sStatusCode = defaultCode;
+                        break;
+                }
+
+                let val = `
+/// <summary>
+/// Example utility class to disable all default Microsoft Identity UI endpoints
+/// except those specified in the AllowedPaths string array.
+/// </summary>
+public class DisableIdentityEndpointOptions : IDisableEndpointOptions {
+\tpublic IEnumerable<string>? AllowedPaths { get; set; } = new string[] {${sAllowedPaths}};
+\tpublic string? BasePath { get; set; } = "${basePath}";
+\tpublic string? RedirectUrl { get; set; }${sRedirectUrl}
+\tpublic int DefaultStatusCode { get; set; } = ${sStatusCode};
+\tpublic string? DefaultStatusMessage { get; set; }${sDefaultMessage}
+}
+`;
+
+                let dlg = bootbox.prompt({
+                    title: 'Generated code for Options Class',
+                    inputType: 'textarea',
+                    size: 'large',
+                    centerVertical: true,
+                    callback: function (result) {
+                        console.log(result);
+                    },
+                    onShown: function (e) {
+                        $o = $(e.delegateTarget);
+                        $('textarea', $o).css('min-height',
+                            'calc(100vh - ' +
+                            'calc(' +
+                                '(var(--bs-modal-header-padding-y) * 2) + ' + // Padding for Dialog header
+                                'calc(1rem * var(--bs-modal-title-line-height) ) + ' + // Height of Header Text
+                                'calc(2 * var(--bs-modal-footer-gap) ) + ' + // Height of footer gap
+                                'calc(4rem) + ' +   // 4rem for Button and padding
+                                'calc(6 * var(--bs-modal-padding) ) ' + // Misc dialog padding
+                            ')' +
+                        ')');
+                        $('textarea', $o).val(val.trim());
+                    }
+                });
+            });
+
+            function showRedirectUrl() {
+                if (defaultCode >= 300 && defaultCode < 400) {
+                    $('input:text[name=redirectUrl]').closest('div.row').removeClass('d-none');
+                } else {
+                    $('input:text[name=redirectUrl]').closest('div.row').addClass('d-none');
+                }
+            }
+
+
+            showRedirectUrl();
+        })(jQuery);
+    </script>
+}

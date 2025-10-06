@@ -12,11 +12,14 @@ builder.Services.AddIdentityMocking<TUser>();
 
 var mvcBuilder = builder.Services.AddControllersWithViews();
 
-
+/*
+var disabledOptions = new DisableIdentityEndpointOptions();
+((List<string>?)disabledOptions.AllowedPaths)?.Add("/Identity/Account/Manage");
+builder.Services.AddSingleton<DisableIdentityEndpointOptions>(disabledOptions);
+*/
 
 var app = builder.Build();
 
-app.UseMiddleware<DisableEndpointMiddleware<DisableIdentityEndpointOptions>>();
 
 app.UseExceptionHandler("/Error");
 
@@ -24,12 +27,14 @@ app.UseHttpsRedirection();
 
 
 app.UseStaticFiles();
+
+
+app.UseMiddleware<DisableEndpointMiddleware<DisableIdentityEndpointOptions>>();
+
 app.UseRouting();
 
 app.UseAuthentication();    // Initializes MS Identity Authentication Middleware 
 app.UseAuthorization();     // Initialized MS Identity Authorization Middleware 
-
-app.MapGet("/", () => "Hello World!");
 
 app.UseEndpoints(endpoints =>
 {
